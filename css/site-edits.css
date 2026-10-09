@@ -95,12 +95,7 @@ html.lenis,html.lenis body{height:auto}
 /* Конец страницы: без «резинки» при доскролле до подвала */
 html,body{overscroll-behavior-y:none}
 
-/* Бургер-меню (телефон и планшет): убрана кнопка «Начать с консультации» */
-#ypDrop .pan a.cta{display:none !important}
 
-/* Верхнее меню на компьютере: убрана кнопка «Начать с консультации», пункты у правого края плашки */
-#ypHead .cta{display:none !important}
-@media(min-width:1081px){html #ypHead .bar{grid-template-columns:1fr auto !important}html #ypHead .links{justify-self:end !important;grid-column:2 !important}html #ypHead .right{display:none !important}}
 
 /* Блог: на телефоне подпись третьей вкладки короче, чтобы не наезжала на плюс */
 .acc-label .lbl-short{display:none}
@@ -141,17 +136,11 @@ body::after{
 #rec2720256801 .tn-elem[data-elem-id="1788344216059000007"] .tn-atom,
 #rec2744027601 .tn-elem[data-elem-id="1788345023441000001"] .tn-atom{transform:none !important}
 
-/* Бургер на первом экране: без кнопки «Начать с консультации» (телефон и планшет) */
-#ypmDrop .ypmPan a.ypmCta{display:none !important}
 /* Телефон: бургер на первом экране того же размера и на том же месте, что и в закреплённом меню (32 ед., отступ 20) */
 @media screen and (max-width:767px){
   #ypMenu{align-items:flex-start;justify-content:flex-start}
   #ypMenu .ypmBtn{width:32px;height:32px;margin:9px 0 0 10px}
 }
-@media(min-width:1081px) and (max-width:1200px){html #ypHead .links a{padding-left:calc(7 * var(--hd-k) * 1px) !important;padding-right:calc(7 * var(--hd-k) * 1px) !important}}
-/* Последний пункт: текст у правого края с тем же отступом, что у логотипа слева */
-@media(min-width:1081px){html #ypHead .links{margin-right:calc(-12 * var(--hd-k) * 1px)}}
-@media(min-width:1081px) and (max-width:1200px){html #ypHead .links{margin-right:calc(-7 * var(--hd-k) * 1px)}}
 
 /* Блог на телефоне: отступ от краёв экрана 10 ед., как у «Вопрос-ответ» (внутренний отступ обёртки убран) */
 @media screen and (max-width:767px){
