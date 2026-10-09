@@ -109,3 +109,12 @@ html,body{overscroll-behavior-y:none}
   .acc-label .lbl-short{display:inline}
 }
 
+
+/* Плюсики → крестики: мягкий разгон и торможение, поворот в обе стороны одинаково плавный */
+:root{--yp-spin:cubic-bezier(.65,0,.35,1)}
+.faqIcon{transition:transform .75s var(--yp-spin) !important}
+.eduPlus{transition:transform .75s var(--yp-spin),background .3s ease !important}
+.acc-plus{transition:transform .75s var(--yp-spin),background .3s ease,border-color .3s ease !important}
+.igPlus .tn-atom{transition:transform .75s var(--yp-spin) !important}
+.igNote{transition:opacity .5s ease,transform .7s var(--yp-ease),visibility .5s !important}
+@media(prefers-reduced-motion:reduce){.faqIcon,.eduPlus,.acc-plus,.igPlus .tn-atom,.igNote{transition:none !important}}
