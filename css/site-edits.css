@@ -100,7 +100,7 @@ html,body{overscroll-behavior-y:none}
 
 /* Верхнее меню на компьютере: убрана кнопка «Начать с консультации», пункты у правого края плашки */
 #ypHead .cta{display:none !important}
-#ypHead .links{justify-self:end}
+@media(min-width:1081px){html #ypHead .bar{grid-template-columns:1fr auto !important}html #ypHead .links{justify-self:end !important;grid-column:2 !important}html #ypHead .right{display:none !important}}
 
 /* Блог: на телефоне подпись третьей вкладки короче, чтобы не наезжала на плюс */
 .acc-label .lbl-short{display:none}
@@ -148,3 +148,4 @@ body::after{
   #ypMenu{align-items:flex-start;justify-content:flex-start}
   #ypMenu .ypmBtn{width:32px;height:32px;margin:9px 0 0 10px}
 }
+@media(min-width:1081px) and (max-width:1200px){html #ypHead .links a{padding-left:calc(7 * var(--hd-k) * 1px) !important;padding-right:calc(7 * var(--hd-k) * 1px) !important}}
