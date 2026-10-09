@@ -111,7 +111,7 @@
     var d = newH - oldH, oldEnd = c0 + oldH;
     kids().forEach(function(el){
       if(el === s || el === p) return;
-      if(TITLE_SET.indexOf(id(el)) >= 0) { if(d > 0) moveTo(el, T(el) + d / 2); }
+      if(TITLE_SET.indexOf(id(el)) >= 0) { moveTo(el, T(el) + Math.max(d, 0) / 2 + 44); }  /* +44: место убранной кнопки */
       else if(T(el) >= oldEnd - 2 && T(el) < 3000) moveTo(el, T(el) + d);
     });
     cityUnderRole(T(byId(NAME)));
