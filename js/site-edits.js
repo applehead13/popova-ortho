@@ -126,6 +126,38 @@
     });
   }
 
+  /* Перезагрузка и «назад»: страница остаётся на том же месте лендинга. */
+  (function(){
+    var KEY = 'ypScrollY', nav = null, restoring = true;
+    try{ if('scrollRestoration' in history) history.scrollRestoration = 'manual'; }catch(e){}
+    try{ var e0 = performance.getEntriesByType('navigation')[0]; nav = e0 && e0.type; }catch(e){}
+    var saved = 0;
+    try{ saved = (nav === 'reload' || nav === 'back_forward') ? parseFloat(sessionStorage.getItem(KEY)) || 0 : 0; }catch(e){}
+    function save(){
+      if(restoring) return;
+      try{ sessionStorage.setItem(KEY, String(Math.round(window.pageYOffset || document.documentElement.scrollTop || 0))); }catch(e){}
+    }
+    var tk = null;
+    window.addEventListener('scroll', function(){ if(tk) return; tk = setTimeout(function(){ tk = null; save(); }, 150); }, {passive:true});
+    window.addEventListener('pagehide', save);
+    document.addEventListener('visibilitychange', function(){ if(document.visibilityState === 'hidden') save(); });
+    function jump(y){
+      if(window.ypLenis && window.ypLenis.scrollTo){ try{ window.ypLenis.scrollTo(y, {immediate:true, force:true}); }catch(e){} }
+      window.scrollTo(0, y);
+    }
+    function finish(){ restoring = false; }
+    if(!saved){ window.addEventListener('load', function(){ setTimeout(finish, 800); }); return; }
+    /* высоту страницы Тильда и наши скрипты досчитывают после загрузки,
+       поэтому возвращаемся несколько раз; ручная прокрутка пользователя отменяет возврат */
+    var userMoved = false;
+    ['wheel','touchstart','keydown','mousedown'].forEach(function(t){ window.addEventListener(t, function(){ userMoved = true; }, {passive:true, once:true}); });
+    function go(){ if(!userMoved) jump(saved); }
+    window.addEventListener('load', function(){
+      go(); setTimeout(go, 500); setTimeout(go, 1200);
+      setTimeout(function(){ go(); finish(); }, 2200);
+    });
+  })();
+
   function all(){ alignStats(); alignFooter(); alignPrices(); alignSegFont(); setTimeout(alignSegFont, 1500); }
   ready(all);
   window.addEventListener('resize', debounce(all, 300));
