@@ -158,7 +158,43 @@
     });
   })();
 
-  function all(){ alignStats(); alignFooter(); alignPrices(); alignSegFont(); setTimeout(alignSegFont, 1500); }
+  /* «Стоимость» и «Контакты»: верх букв маленького зелёного заголовка лежит на верху букв
+     большого серого слова. Пустой воздух в контейнерах не учитывается: верх глифов
+     считается по метрикам шрифта (canvas), поэтому не зависит от высоты рамки. */
+  var INK_PAIRS = [
+    ['#rec2743909701', '1785873124650000004', '1785873124652000041'],
+    ['#rec2744027601', '1785873517190000001', '1785873517190000002']
+  ];
+  function inkTop(rec, id){
+    var e = document.querySelector(rec + ' .tn-elem[data-elem-id="' + id + '"]'); if(!e) return null;
+    var a = e.querySelector('.tn-atom'); if(!a || !e.offsetWidth) return null;
+    var cs = getComputedStyle(a), t = a.textContent.trim();
+    if(cs.textTransform === 'uppercase') t = t.toUpperCase();
+    var cv = document.createElement('canvas').getContext('2d');
+    cv.font = cs.fontStyle + ' ' + cs.fontWeight + ' ' + cs.fontSize + ' ' + cs.fontFamily;
+    var m = cv.measureText(t);
+    if(!m.fontBoundingBoxAscent) return null;
+    var dv = (m.fontBoundingBoxAscent - m.fontBoundingBoxDescent) / 2 - m.actualBoundingBoxAscent;
+    var r = e.getBoundingClientRect(), k = r.width / e.offsetWidth;
+    var rot = /matrix\(0, -1/.test(cs.transform);
+    return {el: e, k: k, rot: rot, c: rot ? r.left + r.width / 2 + dv * k : r.top + r.height / 2 + dv * k};
+  }
+  function alignInk(){
+    INK_PAIRS.forEach(function(pr){
+      var small = document.querySelector(pr[0] + ' .tn-elem[data-elem-id="' + pr[2] + '"]');
+      if(small) small.style.removeProperty('translate');
+      var b = inkTop(pr[0], pr[1]), sm = inkTop(pr[0], pr[2]);
+      if(!b || !sm || !isFinite(b.c) || !isFinite(sm.c) || !sm.k) return;
+      /* если верх большого слова обрезан краем блока, ориентируемся на видимый край */
+      var ab = document.querySelector(pr[0] + ' .t396__artboard'), target = b.c;
+      if(ab){ var ar = ab.getBoundingClientRect(); target = Math.max(b.c, sm.rot ? ar.left : ar.top); }
+      var d = (target - sm.c) / sm.k;
+      if(Math.abs(d) < 0.2 || Math.abs(d) > 120) return;
+      small.style.setProperty('translate', sm.rot ? d + 'px 0' : '0 ' + d + 'px', 'important');
+    });
+  }
+
+  function all(){ alignInk(); alignStats(); alignFooter(); alignPrices(); alignSegFont(); setTimeout(alignSegFont, 1500); setTimeout(alignInk, 2500); }
   ready(all);
   window.addEventListener('resize', debounce(all, 300));
   if(document.fonts && document.fonts.ready) document.fonts.ready.then(function(){ setTimeout(all, 200); });
