@@ -118,3 +118,8 @@ html,body{overscroll-behavior-y:none}
 .igPlus .tn-atom{transition:transform .75s var(--yp-spin) !important}
 .igNote{transition:opacity .5s ease,transform .7s var(--yp-ease),visibility .5s !important}
 @media(prefers-reduced-motion:reduce){.faqIcon,.eduPlus,.acc-plus,.igPlus .tn-atom,.igNote{transition:none !important}}
+
+/* Подвал, телефон: отступ между карточкой с фото и строкой «Юлия Попова / Все права защищены» */
+@media screen and (max-width:767px){
+  #rec2744027601 .tn-group[data-group-id="1785873517191000005"]{translate:0 24px}
+}
