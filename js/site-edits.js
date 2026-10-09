@@ -119,13 +119,17 @@
       if(!grp || !p) return;
       var item = null;
       grp.querySelectorAll('.tn-atom').forEach(function(a){ if(!item && a.textContent.trim().length > 12 && parseFloat(getComputedStyle(a).fontSize) < 18) item = a; });
-      if(!item || !grp.offsetWidth) return;
-      var scale = grp.getBoundingClientRect().width / grp.offsetWidth;
-      var size = parseFloat(getComputedStyle(item).fontSize) * (isFinite(scale) && scale > 0 ? scale : 1);
-      /* сам ответ может лежать в том же масштабируемом блоке — учитываем его масштаб */
-      var ov = p.parentElement, sp = (ov && ov.offsetWidth) ? ov.getBoundingClientRect().width / ov.offsetWidth : 1;
-      if(!isFinite(sp) || sp <= 0) sp = 1;
-      p.style.setProperty('font-size', (size / sp).toFixed(2) + 'px', 'important');
+      if(!item) return;
+      /* сравниваем размеры уже отрисованного текста (в пикселях экрана), поэтому результат
+         не зависит от того, как браузер считает масштаб (zoom/автоскейл) */
+      function h(el){ var r = document.createRange(); r.selectNodeContents(el); var q = r.getClientRects()[0]; return q ? q.height : 0; }
+      var cur = parseFloat(getComputedStyle(p).fontSize) || 14;
+      for(var n = 0; n < 3; n++){
+        var hi = h(item), hp = h(p);
+        if(!hi || !hp || Math.abs(hi - hp) < 0.3) break;
+        cur = cur * hi / hp;
+        p.style.setProperty('font-size', cur.toFixed(2) + 'px', 'important');
+      }
     });
   }
 
@@ -197,7 +201,25 @@
     });
   }
 
-  function all(){ alignInk(); alignStats(); alignFooter(); alignPrices(); alignSegFont(); setTimeout(alignSegFont, 1500); setTimeout(alignInk, 2500); }
+  /* Зазор от последней карточки «Вопрос-ответ» до разделителя «блог» равен зазору
+     от разделителя «блог» до блока с карточками блога. */
+  function alignBlogGap(){
+    var div = document.getElementById('rec3506208701');
+    var acc = document.querySelector('.acc-wrapper');
+    var items = document.querySelectorAll('.faqItem');
+    if(!div || !acc || !items.length || document.querySelector('.faqItem.faqOpen')) return;
+    div.style.removeProperty('margin-top');
+    var bottom = 0; items.forEach(function(i){ bottom = Math.max(bottom, i.getBoundingClientRect().bottom); });
+    var dr = div.getBoundingClientRect(), ar = acc.getBoundingClientRect();
+    /* верх и низ самой надписи разделителя */
+    var lab = div.querySelector('.tn-elem');
+    var lr = lab ? lab.getBoundingClientRect() : dr;
+    var above = lr.top - bottom, below = ar.top - lr.bottom;
+    var d = above - below;
+    if(d > 2 && d < 400) div.style.setProperty('margin-top', (-d) + 'px', 'important');
+  }
+
+  function all(){ alignBlogGap(); alignInk(); alignStats(); alignFooter(); alignPrices(); alignSegFont(); setTimeout(alignSegFont, 1500); setTimeout(alignInk, 2500); setTimeout(alignBlogGap, 2500); }
   ready(all);
   window.addEventListener('resize', debounce(all, 300));
   if(document.fonts && document.fonts.ready) document.fonts.ready.then(function(){ setTimeout(all, 200); });
