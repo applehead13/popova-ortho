@@ -159,8 +159,17 @@
     var userMoved = false;
     ['wheel','touchstart','keydown','mousedown'].forEach(function(t){ window.addEventListener(t, function(){ userMoved = true; }, {passive:true, once:true}); });
     function go(){ if(!userMoved) jump(saved); }
+    /* пока вёрстка пересчитывается и страница возвращается на место, держим её невидимой,
+       чтобы не мелькал сжатый первый экран; плавно показываем уже на нужном месте */
+    var hold = document.createElement('style');
+    hold.textContent = 'html{transition:opacity .4s ease}html.ypHold{opacity:0}';
+    document.head.appendChild(hold);
+    document.documentElement.classList.add('ypHold');
+    var shown = false;
+    function reveal(){ if(shown) return; shown = true; go(); document.documentElement.classList.remove('ypHold'); }
+    setTimeout(reveal, 4500);
     window.addEventListener('load', function(){
-      go(); setTimeout(go, 500); setTimeout(go, 1200);
+      go(); setTimeout(go, 400); setTimeout(reveal, 750); setTimeout(go, 1200);
       setTimeout(function(){ go(); finish(); }, 2200);
     });
   })();
