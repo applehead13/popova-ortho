@@ -1,0 +1,28 @@
+# Одноразово копирует шрифты сайта с CDN Тильды в репозиторий,
+# чтобы сайт не зависел от Тильды. Запускается вручную или при пуше,
+# пока шрифтов в репозитории ещё нет.
+name: fetch-fonts
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: [.github/workflows/fetch-fonts.yml]
+permissions:
+  contents: write
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download fonts and point CSS to local copies
+        run: |
+          set -e
+          mkdir -p fonts
+          curl -fsSL -o fonts/Wastebased.woff2 https://static.tildacdn.com/tild3232-6636-4337-b238-326334323336/Wastebased.woff2
+          curl -fsSL -o fonts/canela_roman.woff2 https://static.tildacdn.com/tild3233-6463-4333-b930-373638633134/canela_roman.woff2
+          sed -i "s#https://static.tildacdn.com/tild3232-6636-4337-b238-326334323336/Wastebased.woff2#../fonts/Wastebased.woff2#; s#https://static.tildacdn.com/tild3233-6463-4333-b930-373638633134/canela_roman.woff2#../fonts/canela_roman.woff2#" css/tilda-blocks-page169459809.min.css
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add fonts css
+          git diff --cached --quiet || git commit -m "Copy site fonts from Tilda CDN into the repo"
+          git push
