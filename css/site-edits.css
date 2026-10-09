@@ -140,3 +140,11 @@ body::after{
 /* Пункт «Отзывы» (главный экран и подвал): в макете был повёрнут на 1°, возвращён в горизонталь */
 #rec2720256801 .tn-elem[data-elem-id="1788344216059000007"] .tn-atom,
 #rec2744027601 .tn-elem[data-elem-id="1788345023441000001"] .tn-atom{transform:none !important}
+
+/* Бургер на первом экране: без кнопки «Начать с консультации» (телефон и планшет) */
+#ypmDrop .ypmPan a.ypmCta{display:none !important}
+/* Телефон: бургер на первом экране того же размера и на том же месте, что и в закреплённом меню (32 ед., отступ 20) */
+@media screen and (max-width:767px){
+  #ypMenu{align-items:flex-start;justify-content:flex-start}
+  #ypMenu .ypmBtn{width:32px;height:32px;margin:9px 0 0 10px}
+}
