@@ -152,3 +152,8 @@ body::after{
 /* Последний пункт: текст у правого края с тем же отступом, что у логотипа слева */
 @media(min-width:1081px){html #ypHead .links{margin-right:calc(-12 * var(--hd-k) * 1px)}}
 @media(min-width:1081px) and (max-width:1200px){html #ypHead .links{margin-right:calc(-7 * var(--hd-k) * 1px)}}
+
+/* Блог на телефоне: отступ от краёв экрана 10 ед., как у «Вопрос-ответ» (внутренний отступ обёртки убран) */
+@media screen and (max-width:767px){
+  .acc-page-wrapper{padding-left:0 !important;padding-right:0 !important}
+}
