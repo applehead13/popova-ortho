@@ -111,7 +111,22 @@
     });
   }
 
-  function all(){ alignStats(); alignFooter(); alignPrices(); }
+  /* Стеклянные карточки «жалобы»: текст ответа при наведении того же размера, что и
+     текст списка в карточке до наведения (с учётом масштаба блока на экране). */
+  function alignSegFont(){
+    document.querySelectorAll('.segCard').forEach(function(card){
+      var grp = card.querySelector('.segText'), p = card.querySelector('.segOverlay p');
+      if(!grp || !p) return;
+      var item = null;
+      grp.querySelectorAll('.tn-atom').forEach(function(a){ if(!item && a.textContent.trim().length > 12 && parseFloat(getComputedStyle(a).fontSize) < 18) item = a; });
+      if(!item || !grp.offsetWidth) return;
+      var scale = grp.getBoundingClientRect().width / grp.offsetWidth;
+      var size = parseFloat(getComputedStyle(item).fontSize) * (isFinite(scale) && scale > 0 ? scale : 1);
+      p.style.setProperty('font-size', size.toFixed(2) + 'px', 'important');
+    });
+  }
+
+  function all(){ alignStats(); alignFooter(); alignPrices(); alignSegFont(); setTimeout(alignSegFont, 1500); }
   ready(all);
   window.addEventListener('resize', debounce(all, 300));
   if(document.fonts && document.fonts.ready) document.fonts.ready.then(function(){ setTimeout(all, 200); });
