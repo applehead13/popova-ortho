@@ -31,7 +31,7 @@
 
 /* «Обо мне», планшет: после правки переносов (предлоги не повисают) абзац слева
    стал на строку длиннее, поэтому блок текста поднят, чтобы он не наезжал на фото */
-@media screen and (max-width:1199px){
+@media screen and (min-width:768px) and (max-width:1199px){
   #rec2743211601 .tn-group[data-group-id="1785870516157000002"]{top:55px !important}
 }
 
@@ -78,3 +78,19 @@ html.lenis,html.lenis body{height:auto}
 .lenis.lenis-smooth [data-lenis-prevent]{overscroll-behavior:contain}
 .lenis.lenis-stopped{overflow:clip}
 .lenis.lenis-smooth iframe{pointer-events:none}
+
+/* FAQ: убрана плашка «Не нашли свой ответ?» вместе с уголками и стрелкой */
+#rec2750450201 .tn-group[data-group-id="1785914631633000069"],
+#rec2750450201 .tn-group[data-group-id="1786291708545000010"],
+#rec2750450201 .tn-elem[data-elem-id="1785914631633000076"],
+#rec2750450201 .tn-elem[data-elem-id="1785914631633000077"],
+#rec2750450201 .tn-elem[data-elem-id="1785914631633000078"],
+#rec2750450201 .tn-elem[data-elem-id="1785914631633000079"]{display:none !important}
+
+/* Блог, вкладка «Техника чистки»: видео вместо заглушки */
+.care-video-preview .care-video{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;display:block;background:#1c391b}
+.care-video-preview .care-video-play{z-index:2;transition:opacity .4s ease,transform .5s var(--yp-ease)}
+.care-video-preview.is-playing .care-video-play{opacity:0;transform:scale(.85);pointer-events:none}
+
+/* Конец страницы: без «резинки» при доскролле до подвала */
+html,body{overscroll-behavior-y:none}
