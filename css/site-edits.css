@@ -149,3 +149,6 @@ body::after{
   #ypMenu .ypmBtn{width:32px;height:32px;margin:9px 0 0 10px}
 }
 @media(min-width:1081px) and (max-width:1200px){html #ypHead .links a{padding-left:calc(7 * var(--hd-k) * 1px) !important;padding-right:calc(7 * var(--hd-k) * 1px) !important}}
+/* Последний пункт: текст у правого края с тем же отступом, что у логотипа слева */
+@media(min-width:1081px){html #ypHead .links{margin-right:calc(-12 * var(--hd-k) * 1px)}}
+@media(min-width:1081px) and (max-width:1200px){html #ypHead .links{margin-right:calc(-7 * var(--hd-k) * 1px)}}
