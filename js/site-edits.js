@@ -88,7 +88,30 @@
     set(sft);
   }
 
-  function all(){ alignStats(); alignFooter(); }
+  /* «Стоимость», телефон и планшет: цены начинаются на одной линии — по левому краю
+     самой длинной цены (блоки не двигаются, сдвигаются только короткие цены вправо/влево). */
+  var PRICES = ['1785873124651000010','1785873124651000015','1785873124651000020','1785873124651000025','1785873124652000030','1785873124652000035','1785873124652000040'];
+  function alignPrices(){
+    var els = PRICES.map(function(id){ return document.querySelector('#rec2743909701 .tn-elem[data-elem-id="' + id + '"]'); }).filter(Boolean);
+    els.forEach(function(e){ e.style.removeProperty('translate'); });
+    if(window.innerWidth >= 1200 || els.length < 2) return;
+    /* ширину берём по самому широкому тексту, а не по рамке элемента */
+    var lefts = els.map(function(e){ return e.getBoundingClientRect().left; });
+    var target = Math.min.apply(null, lefts);
+    var probe = els[lefts.indexOf(Math.max.apply(null, lefts))];
+    var dx = target - probe.getBoundingClientRect().left;
+    if(Math.abs(dx) < 0.3) return;
+    probe.style.setProperty('translate', dx + 'px 0', 'important');
+    var k = Math.abs(dx) > 0 ? (probe.getBoundingClientRect().left - (target - dx)) / dx : 1;
+    probe.style.removeProperty('translate');
+    if(!isFinite(k) || k < 0.05) k = 1;
+    els.forEach(function(e, i){
+      var d = (target - lefts[i]) / k;
+      if(Math.abs(d) > 0.3 && Math.abs(d) < 200) e.style.setProperty('translate', d + 'px 0', 'important');
+    });
+  }
+
+  function all(){ alignStats(); alignFooter(); alignPrices(); }
   ready(all);
   window.addEventListener('resize', debounce(all, 300));
   if(document.fonts && document.fonts.ready) document.fonts.ready.then(function(){ setTimeout(all, 200); });
