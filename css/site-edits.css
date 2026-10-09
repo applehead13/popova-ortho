@@ -94,3 +94,6 @@ html.lenis,html.lenis body{height:auto}
 
 /* Конец страницы: без «резинки» при доскролле до подвала */
 html,body{overscroll-behavior-y:none}
+
+/* Бургер-меню (телефон и планшет): убрана кнопка «Начать с консультации» */
+#ypDrop .pan a.cta{display:none !important}
