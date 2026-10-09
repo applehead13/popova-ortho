@@ -153,23 +153,31 @@
       window.scrollTo(0, y);
     }
     function finish(){ restoring = false; }
-    if(!saved){ window.addEventListener('load', function(){ setTimeout(finish, 800); }); return; }
+    /* пока вёрстка пересчитывается (масштаб Тильды, первый экран, выравнивания) и страница
+       возвращается на место, держим её невидимой, чтобы не мелькала «сырая» версия;
+       затем плавно показываем. При первом заходе всё закрывает прелоадер. */
+    var seen = false;
+    try{ seen = sessionStorage.getItem('ypLoaderSeen') === '1'; }catch(e){}
+    var hold = null, shown = false;
+    if(saved || seen){
+      hold = document.createElement('style');
+      hold.textContent = 'html{transition:opacity .4s ease}html.ypHold{opacity:0}';
+      document.head.appendChild(hold);
+      document.documentElement.classList.add('ypHold');
+    }
+    var userMoved = false;
+    function go(){ if(saved && !userMoved) jump(saved); }
+    function reveal(){ if(shown) return; shown = true; go(); document.documentElement.classList.remove('ypHold'); }
+    if(hold) setTimeout(reveal, 4500);
+    if(!saved){
+      window.addEventListener('load', function(){ setTimeout(reveal, 900); setTimeout(finish, 1200); });
+      return;
+    }
     /* высоту страницы Тильда и наши скрипты досчитывают после загрузки,
        поэтому возвращаемся несколько раз; ручная прокрутка пользователя отменяет возврат */
-    var userMoved = false;
     ['wheel','touchstart','keydown','mousedown'].forEach(function(t){ window.addEventListener(t, function(){ userMoved = true; }, {passive:true, once:true}); });
-    function go(){ if(!userMoved) jump(saved); }
-    /* пока вёрстка пересчитывается и страница возвращается на место, держим её невидимой,
-       чтобы не мелькал сжатый первый экран; плавно показываем уже на нужном месте */
-    var hold = document.createElement('style');
-    hold.textContent = 'html{transition:opacity .4s ease}html.ypHold{opacity:0}';
-    document.head.appendChild(hold);
-    document.documentElement.classList.add('ypHold');
-    var shown = false;
-    function reveal(){ if(shown) return; shown = true; go(); document.documentElement.classList.remove('ypHold'); }
-    setTimeout(reveal, 4500);
     window.addEventListener('load', function(){
-      go(); setTimeout(go, 400); setTimeout(reveal, 750); setTimeout(go, 1200);
+      go(); setTimeout(go, 400); setTimeout(reveal, 900); setTimeout(go, 1300);
       setTimeout(function(){ go(); finish(); }, 2200);
     });
   })();
