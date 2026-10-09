@@ -122,7 +122,10 @@
       if(!item || !grp.offsetWidth) return;
       var scale = grp.getBoundingClientRect().width / grp.offsetWidth;
       var size = parseFloat(getComputedStyle(item).fontSize) * (isFinite(scale) && scale > 0 ? scale : 1);
-      p.style.setProperty('font-size', size.toFixed(2) + 'px', 'important');
+      /* сам ответ может лежать в том же масштабируемом блоке — учитываем его масштаб */
+      var ov = p.parentElement, sp = (ov && ov.offsetWidth) ? ov.getBoundingClientRect().width / ov.offsetWidth : 1;
+      if(!isFinite(sp) || sp <= 0) sp = 1;
+      p.style.setProperty('font-size', (size / sp).toFixed(2) + 'px', 'important');
     });
   }
 
