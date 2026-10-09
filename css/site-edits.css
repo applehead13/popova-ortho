@@ -1,0 +1,80 @@
+/* Правки по просьбе владелицы сайта, добавлено при переносе с Тильды.
+   Элементы убираются через display:none (а не удаляются из кода),
+   потому что скрипты анимации Тильды обращаются к ним по id. */
+
+/* Первый экран: плашки «А это больно?/Дорого?/Неловко в 30+», «указать [номер телефона]»,
+   кнопка «Начать с консультации», значки Telegram и почты со стрелкой */
+#rec2720256801 .tn-elem[data-elem-id="1785922694516"],
+#rec2720256801 .tn-elem[data-elem-id="1785832076438000025"],
+#rec2720256801 .tn-elem[data-elem-id="1786280469817"],
+#rec2720256801 .tn-elem[data-elem-id="1786280515001000014"],
+#rec2720256801 .tn-elem[data-elem-id="1785836091316"],
+#rec2720256801 .tn-elem[data-elem-id="1786291015901000001"],
+#rec2720256801 .tn-elem[data-elem-id="1786289883883000001"],
+#rec2720256801 .tn-elem[data-elem-id="1786290643183000007"],
+#rec2720256801 .tn-elem[data-elem-id="1786290547672000004"],
+#rec2720256801 .tn-elem[data-elem-id="1786290612850000006"],
+#rec2720256801 .tn-elem[data-elem-id="1788250479203000005"],
+#rec2720256801 .tn-elem[data-elem-id="1788250461150000004"],
+#rec2720256801 .tn-elem[data-elem-id="1788250770657000002"],
+#rec2720256801 .tn-elem[data-elem-id="1788250799114000003"]{display:none !important}
+
+
+/* «Этапы»: кнопка «Начать с консультации» */
+#rec2743588101 .tn-group[data-group-id="1786292542176000010"]{display:none !important}
+
+/* Футер: плашки «номер телефона» и «телеграм» (flex-группа сама сдвигает оставшиеся
+   «электронная почта» и «инстаграм») и текст «Лицензия на осуществление…» */
+#rec2744027601 .tn-group__27440276011785874509562000007,
+#rec2744027601 .tn-group__27440276011785874589304000017,
+#rec2744027601 .tn-elem[data-elem-id="1786002174849000002"]{display:none !important}
+
+/* «Обо мне», планшет: после правки переносов (предлоги не повисают) абзац слева
+   стал на строку длиннее, поэтому блок текста поднят, чтобы он не наезжал на фото */
+@media screen and (max-width:1199px){
+  #rec2743211601 .tn-group[data-group-id="1785870516157000002"]{top:55px !important}
+}
+
+/* Типографика: без одиночных слов в последней строке (в браузерах, где это поддерживается) */
+.t396__elem[data-elem-type="text"] .tn-atom{text-wrap:pretty}
+
+/* ---------- Плавные анимации (длительности и кривая; сами эффекты те же) ---------- */
+:root{--yp-ease:cubic-bezier(.22,1,.36,1)}
+
+/* Вопрос-ответ: раскрытие ответа, плюс → крестик, цвета */
+.faqAnswer{
+  transition:grid-template-rows .65s var(--yp-ease),opacity .3s ease,margin-top .65s var(--yp-ease) !important;
+}
+.faqItem.faqOpen .faqAnswer{
+  transition:grid-template-rows .65s var(--yp-ease),opacity .5s ease .1s,margin-top .65s var(--yp-ease) !important;
+}
+.faqIcon{transition:transform .6s var(--yp-ease) !important}
+.faqItem,.faqItem > .tn-atom{transition:background-color .5s ease !important}
+.faqItem .faqQ .tn-atom,.faqItem .faqAnswer .tn-atom{transition:color .5s ease !important}
+.faqIcon svg,.faqIcon svg *{transition:stroke .5s ease,fill .5s ease !important}
+
+/* «Образование» (плюсы на стеклянных карточках) */
+.eduPlus{transition:transform .6s var(--yp-ease),background .3s ease !important}
+.eduAns{transition:max-width .75s var(--yp-ease),opacity .35s ease !important}
+.eduItem.eduOpen .eduAns{transition:max-width .75s var(--yp-ease),opacity .55s ease .1s !important}
+
+/* Блог: горизонтальный аккордеон с плюсом */
+.acc-item{transition:flex-grow .9s var(--yp-ease),flex-basis .9s var(--yp-ease),height .8s var(--yp-ease) !important}
+.acc-plus{transition:transform .6s var(--yp-ease),background .3s ease,border-color .3s ease !important}
+.acc-label{transition:opacity .4s ease !important}
+.acc-content{transition:opacity .55s ease .25s,transform .8s var(--yp-ease) .2s !important}
+.acc-item:not(.is-open) .acc-content{transition:opacity .25s ease,transform .4s ease !important}
+.care-tab{transition-duration:.4s !important}
+.care-photo,.care-text{transition-duration:.55s !important}
+
+@media(prefers-reduced-motion:reduce){
+  .faqAnswer,.faqItem.faqOpen .faqAnswer,.faqIcon,.eduPlus,.eduAns,.eduItem.eduOpen .eduAns,
+  .acc-item,.acc-plus,.acc-content{transition:none !important}
+}
+
+/* Lenis (плавная прокрутка): служебные правила из lenis.css, версия 1.1.18 */
+html.lenis,html.lenis body{height:auto}
+.lenis.lenis-smooth{scroll-behavior:auto !important}
+.lenis.lenis-smooth [data-lenis-prevent]{overscroll-behavior:contain}
+.lenis.lenis-stopped{overflow:clip}
+.lenis.lenis-smooth iframe{pointer-events:none}
